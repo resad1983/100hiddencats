@@ -2,21 +2,40 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8" />
-  <title>中城躲貓貓</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <!-- RWD 必備，讓手機以裝置寬度排版 -->
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <title>台中躲貓貓 ‑ 輸入暱稱</title>
+
+  <!-- 極簡樣式：置中表單、避免頁面左右滑動 -->
+  <style>
+    body{display:flex;flex-direction:column;justify-content:center;align-items:center;
+         min-height:100vh;margin:0;font-family:system-ui;background:#fafafa}
+    h1{margin-bottom:1rem}
+    form{display:flex;flex-direction:column;gap:.8rem;width:90%;max-width:320px}
+    input{padding:.6rem;font-size:1rem}
+    button{padding:.6rem;font-size:1rem;background:#4CAF50;color:#fff;border:none;cursor:pointer}
+    button:hover{background:#45A049}
+  </style>
 </head>
+
 <body>
   <h1>中城躲貓貓</h1>
+
+  <!-- 讓使用者輸入暱稱 -->
   <form id="startForm">
     <input id="playerName" placeholder="你的暱稱" required />
     <button type="submit">開始遊戲</button>
   </form>
 
+  <!-- 將暱稱寫入 localStorage，然後跳轉 -->
   <script>
     document.getElementById('startForm').addEventListener('submit', e => {
       e.preventDefault();
-      localStorage.setItem('playerName',
-        document.getElementById('playerName').value.trim());
+      localStorage.setItem(
+        'playerName',
+        document.getElementById('playerName').value.trim() || '遊客'
+      );
       location.href = 'game.html';
     });
   </script>

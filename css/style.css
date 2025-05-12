@@ -1,7 +1,66 @@
-body{font-family:system-ui; margin:0; padding:1rem}
-h1,h2{text-align:center}
-#map{width:100%; height:70vh; border:1px solid #ccc}
-.card img{width:100px; height:100px; object-fit:cover}
-button{padding:.4rem 1rem; margin-top:.3rem}
-.page{display:flex;flex-direction:column;height:100vh}
-#map{flex:1;min-height:50vh}
+/* === Global reset & helpers ================================ */
+*{box-sizing:border-box;margin:0;padding:0}
+img{max-width:100%;height:auto;display:block}
+
+/* 字體與基礎色 */
+body{font-family:system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial,sans-serif;color:#222;background:#fafafa}
+
+/* === 1. 首頁（index.html） ================================ */
+body.home{
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  min-height:100vh;gap:1.2rem;
+}
+body.home h1{font-size:clamp(1.6rem,4vw,2.2rem)}
+body.home form{
+  display:flex;flex-direction:column;gap:.8rem;width:90%;max-width:320px
+}
+body.home input{
+  padding:.6rem;border:1px solid #ccc;border-radius:4px;font-size:1rem
+}
+body.home button{
+  padding:.6rem;border:none;border-radius:4px;
+  background:#4caf50;color:#fff;font-size:1rem;cursor:pointer;
+  transition:.2s background;
+}
+body.home button:hover{background:#45a049}
+
+/* === 2. 遊戲頁（game.html） ============================== */
+body.page{
+  display:flex;flex-direction:column;height:100vh;
+}
+header{
+  padding:.6rem 1rem;background:#fff;border-bottom:1px solid #e0e0e0;
+}
+header h2{font-size:clamp(1.1rem,3.8vw,1.5rem);font-weight:600}
+#map{
+  flex:1;min-height:50vh;
+}
+
+/* === 3. InfoWindow 內卡片 ================================ */
+.card{
+  width:180px;text-align:center;font-size:.9rem;display:flex;
+  flex-direction:column;align-items:center;gap:.3rem;
+}
+.card img{
+  width:100%;height:120px;object-fit:cover;border-radius:6px;
+}
+.card button{
+  padding:.3rem .6rem;margin-top:.3rem;
+  font-size:.85rem;border:none;border-radius:4px;
+  background:#2196f3;color:#fff;cursor:pointer;transition:.2s background;
+}
+.card button:hover{background:#1b83d9}
+
+/* === 4. 通用按鈕（例如 code.html） ====================== */
+button{
+  padding:.5rem 1rem;border:none;border-radius:4px;
+  background:#2196f3;color:#fff;font-size:1rem;cursor:pointer;
+  transition:background .2s;
+}
+button:hover{background:#1b83d9}
+
+/* === 5. 小螢幕微調 ===================================== */
+@media(max-width:480px){
+  .card{width:150px;font-size:.8rem}
+  .card img{height:100px}
+}
