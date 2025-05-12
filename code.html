@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>輸入密碼解鎖</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body style="display:flex;flex-direction:column;align-items:center;gap:1rem;padding:2rem">
+  <h3 id="placeName">解鎖地點</h3>
+
+  <form id="codeForm" style="display:flex;flex-direction:column;gap:.5rem">
+    <input id="codeInput"
+           placeholder="輸入 5 位數字"
+           maxlength="5"
+           pattern="[0-9]{5}"
+           required
+           style="font-size:1.2rem;text-align:center;letter-spacing:.3em">
+    <button type="submit">確定</button>
+  </form>
+
+  <script type="module">
+    import { PLACES } from './js/config.js';
+    import { unlock } from './js/storage.js';
+
+    // 1. 讀取 URL 參數
+    const targetId = new URLSearchParams(location.search).get('target');
+    const place = PLACES.find(p => p.id === targetId);
+    if (!place) { alert('未知地點'); history.back(); }
+
+    // 2. 顯示地點名稱
+    document.getElementById('placeName').textContent = `解鎖「${place.name}」`;
+
+    // 3. 驗證 5 碼
+    document.getElementById('codeForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const val = document.getElementById('codeInput').value.trim();
+      if (val === place.code) {
+        unlock(place.id);
+        alert('✅ 解鎖成功！');
+        location.href = 'game.html';
+      } else {
+        alert('❌ 代碼不正確，再試一次');
+      }
+    });
+  </script>
+</body>
+</html>

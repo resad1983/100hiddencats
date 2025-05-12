@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>台中躲貓貓 ‑ 遊戲中</title>
+
+  <!-- 極簡 RWD 版面 -->
+  <style>
+    body.page{display:flex;flex-direction:column;height:100vh;margin:0;font-family:system-ui}
+    header{padding:.5rem 1rem;background:#fafafa;border-bottom:1px solid #ddd}
+    #map{flex:1;min-height:50vh}
+  </style>
+
+  <!-- ① 殼函式：確保 Google Maps callback 找得到 -->
+  <script>
+    window.initMap = async () => {
+      try {
+        //const mod = await import('./js/map.js');   
+        const mod = await import('./js/map.js?v=marker'); // 真正邏輯
+        mod.initMap();
+      } catch (err) {
+        console.error('map.js 載入失敗：', err);
+        alert('地圖模組載入錯誤，請稍後再試');
+      }
+    };
+  </script>
+
+  <!-- ② 只載 geometry，完全不載 marker library -->
+  <script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOnAYh4bCcygECrSXiE728MdyejAkIxYw&libraries=geometry&callback=initMap&loading=async">
+  </script>
+</head>
+
+<body class="page">
+  <!-- 玩家問候 -->
+  <header><h2 id="hello"></h2></header>
+
+  <!-- 地圖容器 -->
+  <main id="map"></main>
+
+  <!-- 問候腳本 -->
+  <script>
+    const name = localStorage.getItem('playerName') || '遊客';
+    document.getElementById('hello').textContent = `歡迎，${name}！`;
+  </script>
+</body>
+</html>

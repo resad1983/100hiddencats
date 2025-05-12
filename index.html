@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <title>中城躲貓貓</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <h1>中城躲貓貓</h1>
+  <form id="startForm">
+    <input id="playerName" placeholder="你的暱稱" required />
+    <button type="submit">開始遊戲</button>
+  </form>
+
+  <script>
+    document.getElementById('startForm').addEventListener('submit', e => {
+      e.preventDefault();
+      localStorage.setItem('playerName',
+        document.getElementById('playerName').value.trim());
+      location.href = 'game.html';
+    });
+  </script>
+</body>
+</html>
