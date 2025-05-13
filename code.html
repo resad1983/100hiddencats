@@ -2,34 +2,41 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>輸入密碼解鎖</title>
 
   <!-- 共用樣式 -->
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css" />
 
-  <!-- 本頁追加樣式 -->
+  <!-- 本頁附加樣式 -->
   <style>
-    body{display:flex;flex-direction:column;align-items:center;padding:2rem;gap:1.2rem;font-family:system-ui}
+    body{display:flex;flex-direction:column;align-items:center;padding:2rem;gap:1.3rem;font-family:system-ui}
+    /* 回上一頁 */
     #backBtn{
-      align-self:flex-start;margin-bottom:.6rem;
-      display:inline-flex;align-items:center;gap:.3rem;
+      align-self:flex-start;display:inline-flex;align-items:center;gap:.3rem;
       background:#eee;color:#444;border:none;border-radius:4px;
-      padding:.4rem .7rem;font-size:.9rem;cursor:pointer;
-      transition:background .2s;
+      padding:.45rem .8rem;font-size:.9rem;cursor:pointer;transition:background .2s;
     }
     #backBtn:hover{background:#e0e0e0}
     #backBtn svg{width:16px;height:16px;fill:currentColor}
-    #hint{white-space:pre-line;font-size:.95rem;line-height:1.5;color:#333;text-align:center;max-width:360px}
+    /* 提示文字 */
+    #hint{
+      white-space:pre-line;font-size:.95rem;line-height:1.55;
+      text-align:center;color:#333;max-width:360px
+    }
+    /* 表單 */
     form{display:flex;flex-direction:column;gap:.8rem;width:100%;max-width:280px}
     input,button{padding:.6rem;font-size:1rem;border-radius:4px}
-    input{border:1px solid #ccc;text-align:center;letter-spacing:.4em}
-    button{border:none;background:#2196f3;color:#fff;cursor:pointer;transition:.2s background}
+    input{border:1px solid #ccc;text-align:center;letter-spacing:.35em}
+    button{
+      border:none;background:#2196f3;color:#fff;cursor:pointer;
+      transition:background .2s;
+    }
     button:hover{background:#1b83d9}
   </style>
 </head>
 <body>
-  <!-- 🔹 新增：回上一頁按鈕 -->
+  <!-- ↩︎ 回上一頁 -->
   <button id="backBtn" onclick="history.back()">
     <svg viewBox="0 0 24 24"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
     回到地圖
@@ -40,36 +47,42 @@
 
   <form id="codeForm">
     <input id="codeInput"
-           placeholder="輸入 4 位數字"
-           maxlength="5" pattern="[0-9]{5}" required>
+           placeholder="輸入 4 或 5 位密碼"
+           maxlength="5" pattern="[0-9]{4,5}" required>
     <button type="submit">確定</button>
   </form>
 
+  <!-- 主程式：讀地點 → 顯示提示 → 雜湊比對 -->
   <script type="module">
+    /* 1) 讀取工具 */
     import { PLACES } from './js/config.js';
     import { unlock } from './js/storage.js';
+    import { sha256 } from 'https://cdn.jsdelivr.net/npm/js-sha256@0.9.0/+esm';
 
-    /* 1. 取得目標地點 --------------------------------------- */
+    /* 2) 取得 URL 參數 */
     const targetId = new URLSearchParams(location.search).get('target');
     const place    = PLACES.find(p => p.id === targetId);
+
     if (!place){
       alert('未知地點'); history.back();
     }
 
-    /* 2. 顯示名稱與提示 ------------------------------------- */
+    /* 3) 顯示標題與提示文字 */
     placeName.textContent = `解鎖「${place.name}」`;
-    hint.textContent      = place.hint || '請輸入 4 位密碼';
+    hint.textContent      = place.hint || '請輸入密碼';
 
-    /* 3. 驗證密碼 ------------------------------------------- */
+    /* 4) 表單驗證 */
     codeForm.addEventListener('submit', e => {
       e.preventDefault();
-      const val = codeInput.value.trim();
-      if (val === place.code){
-        unlock(place.id);
-        alert('✅ 解鎖成功！');
+      const val = codeInput.value.trim();          // 玩家輸入
+      const ok  = sha256(val) === place.hash;      // 雜湊比對
+
+      if (ok){
+        unlock(place.id);                          // 存進度
+        alert('✅  解鎖成功！');
         location.href = 'game.html';
       }else{
-        alert('❌ 密碼不正確，再試一次');
+        alert('❌  密碼不正確，再試一次');
       }
     });
   </script>
