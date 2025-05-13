@@ -21,8 +21,8 @@
 
   <form id="codeForm">
     <input id="codeInput"
-           placeholder="輸入 5 位數字"
-           maxlength="5" pattern="[0-9]{5}" required>
+           placeholder="輸入 4 位數字"
+           maxlength="4" pattern="[0-9]{4}" required>
     <button type="submit">確定</button>
   </form>
 
@@ -40,7 +40,7 @@
 
     // 2. 顯示地點名稱與 hint
     document.getElementById('placeName').textContent = `解鎖「${place.name}」`;
-    document.getElementById('hint').textContent      = place.hint || '請輸入 5 位密碼';
+    document.getElementById('hint').textContent      = place.hint || '請輸入 4 位密碼';
 
     // 3. 驗證密碼
     document.getElementById('codeForm').addEventListener('submit', e => {
